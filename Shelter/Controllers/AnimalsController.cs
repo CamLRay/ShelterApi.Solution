@@ -3,12 +3,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Shelter.Models;
 
 namespace Shelter.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
   public class AnimalsController : ControllerBase
   {
     private readonly ShelterContext _db;
@@ -19,18 +22,41 @@ namespace Shelter.Controllers
     }
 
 // Get methods
+    [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Animal>>> Get(string species)
+    public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string breed, string gender, bool fixed, bool houseTrained, bool vaccinated)
     {
       var query = _db.Animals.AsQueryable();
 
       if(species != null)
       {
-        query = query.Where(entry => entry.Species.Contains(species));
+        query = query.Where(entry => entry.Species == species);
       }
+      if(breed != null)
+      {
+        query = query.Where(entry => entry.Breed.Contains(breed));
+      }
+      if(gender != null)
+      {
+        query = query.Where(entry => entry.Gender == gender);
+      }
+      if(fixed != null)
+      {
+        query = query.Where(entry => entry.Fixed == fixed);
+      }
+      if(houseTrained != null)
+      {
+        query = query.Where(entry => entry.HouseTrained == houseTrained);
+      }
+      if(vaccinated != null)
+      {
+        query = query.Where(entry => entry.Vaccinated == vaccinated);
+      }
+
       return await query.ToListAsync();
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<Animal>> GetAnimal(int id)
     {
@@ -45,6 +71,7 @@ namespace Shelter.Controllers
     }
 
 // Post methods
+    
     [HttpPost]
     public async Task<ActionResult<Animal>> Post(Animal animal)
     {
@@ -53,7 +80,7 @@ namespace Shelter.Controllers
 
       return CreatedAtAction(nameof(GetAnimal), new { id = animal.AnimalId }, animal);
     }
-
+    
     [HttpPut("{id}")]
     public async Task<ActionResult> Put(int id, Animal animal)
     {
