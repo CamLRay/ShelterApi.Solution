@@ -31,7 +31,7 @@ namespace Shelter.Controllers
 
     [HttpPost]
     [Route("Register")]
-    public async Task<IActionResult> Register([FromBody] UserRegistrationDTO user)
+    public async Task<ActionResult> Register([FromBody] UserRegistrationDTO user)
     {
       if(ModelState.IsValid)
       {
@@ -42,10 +42,10 @@ namespace Shelter.Controllers
           return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Email in use"}, Success = false});
         }
 
-        // if(user.Password != user.ConfirmPassword)
-        // {
-        //   return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Passwords do no match"}, Success = false});
-        // }
+        if(user.Password != user.ConfirmPassword)
+        {
+          return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Passwords do no match"}, Success = false});
+        }
 
         var newUser = new IdentityUser() { Email = user.Email, UserName = user.Email };
         var isCreated = await _userManager.CreateAsync(newUser, user.Password);
@@ -66,6 +66,33 @@ namespace Shelter.Controllers
       }
 
       return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Invalid payload"}, Success = false});
+    }
+
+    [HttpPost]
+    [Route("Login")]
+    public async Task<ActionResult> Login([FromBody] UserLoginDTO user)
+    {
+      if(ModelState.IsValid)
+      {
+        var existingUser = await _userManager.FindByEmailAsync(user.Email);
+        if(existingUser == null)
+        {
+          return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Invalid Login attempt"}, Success = false});
+        }
+        var passCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Password);
+        if(!passCorrect)
+        {
+          return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Invalid Login attempt"}, Success = false});
+        }
+        var jwtToken = GenerateJwtToken(existingUser);
+        return Ok(new RegistrationResponse(){
+          Success = true,
+          Token = jwtToken
+        });
+      }
+
+      return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Invalid payload"}, Success = false});
+      
     }
 
     private string GenerateJwtToken(IdentityUser user)
@@ -91,5 +118,7 @@ namespace Shelter.Controllers
 
       return jwtToken;
     }
+
+
   }
 }
