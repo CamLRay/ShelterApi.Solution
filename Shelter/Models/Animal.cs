@@ -10,10 +10,12 @@ namespace Shelter.Models
         public string Breed { get; set; }
         public int Age { get; set; }
         public string Gender { get; set; }
-        public string Agression { get; set; }
-        public bool Vacinated { get; set; }
+        public string About { get; set; }
+        public string Aggression { get; set; }
+        public bool Vaccinated { get; set; }
         public bool Fixed { get; set; }
         public bool HouseTrained { get; set; }
         public string Image { get; set; }
+        public int Fee { get; set; }
     }
 }
