@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel;
 using Microsoft.IdentityModel.Tokens;
 using Shelter.Models.DTOs.Responses;
 using Shelter.Models.DTOs.Requests;
 using Shelter.Configuration;
+using Shelter.Models;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
@@ -18,6 +17,7 @@ using System.Linq;
 namespace Shelter.Controllers
 {
   [Route("api/[controller]")]
+  [ApiController]
   public class AccountsController : ControllerBase
   {
     private readonly UserManager<IdentityUser> _userManager;
@@ -31,21 +31,21 @@ namespace Shelter.Controllers
 
     [HttpPost]
     [Route("Register")]
-    public async Task<ActionResult> Register([FromBody] UserRegistrationDTO user)
+    public async Task<IActionResult> Register([FromBody] UserRegistrationDTO user)
     {
       if(ModelState.IsValid)
       {
         // check if user exists
-        var userExists = await _userManager.FindByEmailAsync(user.Email);
-        if(userExists != null)
+        var existingUser = await _userManager.FindByEmailAsync(user.Email);
+        if(existingUser != null)
         {
           return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Email in use"}, Success = false});
         }
 
-        if(user.Password != user.ConfirmPassword)
-        {
-          return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Passwords do no match"}, Success = false});
-        }
+        // if(user.Password != user.ConfirmPassword)
+        // {
+        //   return BadRequest(new RegistrationResponse(){ Errors = new List<string>() {"Passwords do no match"}, Success = false});
+        // }
 
         var newUser = new IdentityUser() { Email = user.Email, UserName = user.Email };
         var isCreated = await _userManager.CreateAsync(newUser, user.Password);

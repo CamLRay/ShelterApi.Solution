@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
+
 namespace Shelter.Models
 {
-    public class ShelterContext : IdentityDbContext<ApplicationUser>
+    public class ShelterContext : IdentityDbContext
     {
         public ShelterContext(DbContextOptions<ShelterContext> options)
             : base(options)
@@ -11,6 +12,7 @@ namespace Shelter.Models
         }
 
         public DbSet<Animal> Animals { get; set; }
+
 
         // protected override void OnModelCreating(ModelBuilder builder)
         // {
