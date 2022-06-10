@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Shelter.Models;
 
 namespace Shelter.Controllers
@@ -17,14 +18,13 @@ namespace Shelter.Controllers
       _db = db;
     }
 
-    // GET api/animals
+// Get methods
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Animal>>> Get()
     {
       return await _db.Animals.ToListAsync();
     }
 
-    // GET: api/Animals/2
     [HttpGet("{id}")]
     public async Task<ActionResult<Animal>> GetAnimal(int id)
     {
@@ -38,7 +38,7 @@ namespace Shelter.Controllers
       return animal;
     }
 
-    // POST api/animals
+// Post methods
     [HttpPost]
     public async Task<ActionResult<Animal>> Post(Animal animal)
     {
@@ -48,7 +48,6 @@ namespace Shelter.Controllers
       return CreatedAtAction(nameof(GetAnimal), new { id = animal.AnimalId }, animal);
     }
 
-    // PUT: api/Animals/2
     [HttpPut("{id}")]
     public async Task<ActionResult> Put(int id, Animal animal)
     {
@@ -74,6 +73,21 @@ namespace Shelter.Controllers
           throw;
         }
       }
+
+      return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteAnimal(int id)
+    {
+      var animal = await _db.Animals.FindAsync(id);
+      if (animal == null)
+      {
+        return NotFound();
+      }
+
+      _db.Animals.Remove(animal);
+      await _db.SaveChangesAsync();
 
       return NoContent();
     }

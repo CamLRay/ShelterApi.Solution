@@ -1,3 +1,5 @@
+
+
 namespace Shelter.Models
 {
     public class Animal
@@ -12,5 +14,6 @@ namespace Shelter.Models
         public bool Vacinated { get; set; }
         public bool Fixed { get; set; }
         public bool HouseTrained { get; set; }
+        public string Image { get; set; }
     }
 }
