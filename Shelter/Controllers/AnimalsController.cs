@@ -24,7 +24,7 @@ namespace Shelter.Controllers
       return await _db.Animals.ToListAsync();
     }
 
-    // GET: api/Animals/5
+    // GET: api/Animals/2
     [HttpGet("{id}")]
     public async Task<ActionResult<Animal>> GetAnimal(int id)
     {
@@ -46,6 +46,36 @@ namespace Shelter.Controllers
       await _db.SaveChangesAsync();
 
       return CreatedAtAction(nameof(GetAnimal), new { id = animal.AnimalId }, animal);
+    }
+
+    // PUT: api/Animals/2
+    [HttpPut("{id}")]
+    public async Task<ActionResult> Put(int id, Animal animal)
+    {
+      if (id != animal.AnimalId)
+      {
+        return BadRequest();
+      }
+
+      _db.Entry(animal).State = EntityState.Modified;
+
+      try
+      {
+        await _db.SaveChangesAsync();
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        if (_db.Animals.Any(e => e.AnimalId == id))
+        {
+          return NotFound();
+        }
+        else
+        {
+          throw;
+        }
+      }
+
+      return NoContent();
     }
   }
 }
