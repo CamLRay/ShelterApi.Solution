@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Shelter.Models
 {
-    public class ShelterContext : DbContext
+    public class ShelterContext : IdentityDbContext<ApplicationUser>
     {
         public ShelterContext(DbContextOptions<ShelterContext> options)
             : base(options)
@@ -13,6 +14,7 @@ namespace Shelter.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+          base.OnModelCreating(builder);
           builder.Entity<Animal>()
             .HasData(new Animal {
               AnimalId = 3,
