@@ -24,7 +24,8 @@ namespace Shelter.Controllers
 // Get methods
     [AllowAnonymous]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string breed, string gender, bool fixed, bool houseTrained, bool vaccinated)
+    // public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string breed, string gender, string houseTrained, string vaccinated)
+    public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string breed, string gender, string spayed, string houseTrained, string vaccinated)
     {
       var query = _db.Animals.AsQueryable();
 
@@ -40,17 +41,17 @@ namespace Shelter.Controllers
       {
         query = query.Where(entry => entry.Gender == gender);
       }
-      if(fixed != null)
+      if(spayed != null)
       {
-        query = query.Where(entry => entry.Fixed == fixed);
+        query = query.Where(entry => entry.Spayed);
       }
       if(houseTrained != null)
       {
-        query = query.Where(entry => entry.HouseTrained.ToString() == houseTrained);
+        query = query.Where(entry => entry.HouseTrained);
       }
       if(vaccinated != null)
       {
-        query = query.Where(entry => entry.Vaccinated == vaccinated);
+        query = query.Where(entry => entry.Vaccinated);
       }
 
       return await query.ToListAsync();

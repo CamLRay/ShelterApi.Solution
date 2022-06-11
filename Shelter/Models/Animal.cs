@@ -13,7 +13,7 @@ namespace Shelter.Models
         public string About { get; set; }
         public string Aggression { get; set; }
         public bool Vaccinated { get; set; }
-        public bool Fixed { get; set; }
+        public bool Spayed { get; set; }
         public bool HouseTrained { get; set; }
         public string Image { get; set; }
         public int Fee { get; set; }
