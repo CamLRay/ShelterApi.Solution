@@ -67,7 +67,24 @@ $ dotnet ef database update
 ```
 $ dotnet run
 ```
-* Try API calls in the Postman desktop application to test it out.
+* Try API calls in the Postman desktop application to test it out. Documentation below. 
+
+## API Documentation
+
+Get Requests without parameters returns all animals in the shelter.
+```
+http://localhost:5000/api/animals
+```
+
+Get Requests have the option for Six Parameters which can be chained together. 
+* String species - returns species match
+* String breed - returns breeds containing parameter
+* String gender - returns gender match
+* Boolean fixed - 
+* Boolean houseTrained -
+* Boolean vaccinated -
+An example of a single paramet
+
 
 ## Known Bugs
 * No known bugs, feel free to contact me here if any are found.

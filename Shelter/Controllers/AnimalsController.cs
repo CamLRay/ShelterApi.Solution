@@ -46,7 +46,7 @@ namespace Shelter.Controllers
       }
       if(houseTrained != null)
       {
-        query = query.Where(entry => entry.HouseTrained == houseTrained);
+        query = query.Where(entry => entry.HouseTrained.ToString() == houseTrained);
       }
       if(vaccinated != null)
       {
