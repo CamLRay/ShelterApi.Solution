@@ -25,7 +25,7 @@ namespace Shelter.Controllers
     [AllowAnonymous]
     [HttpGet]
     // public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string breed, string gender, string houseTrained, string vaccinated)
-    public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string breed, string gender, string spayed, string houseTrained, string vaccinated)
+    public async Task<ActionResult<IEnumerable<Animal>>> Get(string species, string breed, string gender, bool spayed, string houseTrained, string vaccinated)
     {
       var query = _db.Animals.AsQueryable();
 
@@ -41,18 +41,7 @@ namespace Shelter.Controllers
       {
         query = query.Where(entry => entry.Gender == gender);
       }
-      if(spayed != null)
-      {
-        query = query.Where(entry => entry.Spayed);
-      }
-      if(houseTrained != null)
-      {
-        query = query.Where(entry => entry.HouseTrained);
-      }
-      if(vaccinated != null)
-      {
-        query = query.Where(entry => entry.Vaccinated);
-      }
+  
 
       return await query.ToListAsync();
     }
@@ -81,6 +70,7 @@ namespace Shelter.Controllers
 
       return CreatedAtAction(nameof(GetAnimal), new { id = animal.AnimalId }, animal);
     }
+
     
     [HttpPut("{id}")]
     public async Task<ActionResult> Put(int id, Animal animal)
@@ -111,6 +101,7 @@ namespace Shelter.Controllers
       return NoContent();
     }
 
+  
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAnimal(int id)
     {

@@ -71,23 +71,50 @@ $ dotnet run
 
 ## API Documentation
 
-Get Requests without parameters returns all animals in the shelter.
+### Get Requests without parameters returns all animals in the shelter.
 ```
 http://localhost:5000/api/animals
 ```
 
-Get Requests have the option for Six Parameters which can be chained together. 
+### Get Requests have the option for Six Parameters which can be chained together using an ampersand. 
 * String species - returns species match
 * String breed - returns breeds containing parameter
 * String gender - returns gender match
-* Boolean fixed - 
-* Boolean houseTrained -
-* Boolean vaccinated -
-An example of a single paramet
+An example of a single parameter
+```
+http://localhost:5000/api/animals?breed=pitbull
+```
 
+### An example of two parameters
+```
+http://localhost:5000/api/animals?breed=pitbull&species=cat
+```
+### Get requests with an id trailing will return the shelter animal with that ID.
+```
+http://localhost:5000/api/animals/3
+```
+
+### Auhtorized users include JWT token from registering or logging in in the header. In postman under the Headers tab. Set the Key to Authorization and the value to 
+```
+Bearer [Youre JWT here]
+```
+
+### Post request requires the entire animal object to be included in the body minus the animalID. An example url for the post request to add an animal to the shelter is
+```
+http://localhost:5000/api/animals
+```
+### Put request requires the entire animal with the data to be updated replaced. The Url requires a trailing ID of the animal to be altered
+```
+http://localhost:5000/api/animals/5
+```
+
+### Delete requests require a trailing Id to indicated the animal to be removed.
+```
+http://localhost:5000/api/animals/5
+```
 
 ## Known Bugs
-* No known bugs, feel free to contact me here if any are found.
+* Data won't seed properly with JWT Authorization
 
 ## License
 
